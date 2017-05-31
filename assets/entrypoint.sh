@@ -4,13 +4,16 @@ USER_ID=${LOCAL_USER_ID:-9001}
 
 echo "=> Starting with UID : $USER_ID"
 
-#useradd --shell /bin/bash -u $USER_ID -o -c "" -m user
-adduser -D -u $USER_ID user
+if [ "x$USER_ID" != "x0" ] ; then
+    adduser -D -u $USER_ID user
 
-export HOME=/home/user
+    export HOME=/home/user
 
-mkdir -p /home/user
+    mkdir -p /home/user
 
-chown $USER_ID:$USER_ID $COMPOSER_CACHE_DIR
+    chown $USER_ID:$USER_ID $COMPOSER_CACHE_DIR
 
-gosu user composer "$@"
+    gosu user composer "$@"
+else 
+    composer "$@"
+fi
